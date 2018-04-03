@@ -1,0 +1,134 @@
+@charset "UTF-8";
+.index-chat-index{
+    .chat-index-home{
+        margin: 0 auto;
+        width: $chatBoxWidth+$onlineListWidth;
+        .chat-box{
+            width: $chatBoxWidth;
+            img{
+                height: $chatImgSize!important;
+            }
+            .chat-log{
+                border: 1px solid #cccccc;
+                height: $chatLogHeight;
+                cursor: text;
+                overflow-y: auto;
+                display: block;
+                word-wrap: break-word;
+                padding: 5px;
+                .u{
+                    margin-bottom: 10px;
+                    .portrait{
+                        width: 50px;
+                        height: 50px;
+                        img{
+                            width: 45px!important;
+                            height: 45px!important;
+                        }
+                    }
+                    .info{
+                        margin-left: 10px;
+                        .name{
+                            font-size: 12px;
+                            padding-bottom: 5px;
+                            color: #999;
+                        }
+                        .message{
+                            max-width: 320px;
+                            padding: 8px 15px;
+                            background-color: #e2e2e2;
+                            border-radius: 3px;
+                            position: relative;
+                            font-size: 14px;
+                            &:after{
+                                position: absolute;
+                                content: '';
+                                left: -10px;
+                                top: 13px;
+                                width: 0;
+                                height: 0;
+                                border-style: solid dashed dashed;
+                                border-color: #e2e2e2 transparent transparent;
+                                overflow: hidden;
+                                border-width: 10px;
+                            }
+                        }
+                    }
+                }
+                .m{
+                    margin-bottom: 10px;
+                    .portrait{
+                        width: 50px;
+                        height: 50px;
+                        img{
+                            width: 45px!important;
+                            height: 45px!important;
+                        }
+                    }
+                    .info{
+                        padding-right: 10px;
+                        .name{
+                            text-align: right;
+                            font-size: 12px;
+                            padding-bottom: 5px;
+                            color: #999;
+                        }
+                        .message{
+                            max-width: 320px;
+                            background-color: #5FB878;
+                            color: #fff;
+                            border-radius: 3px;
+                            position: relative;
+                            font-size: 14px;
+                            padding: 8px 15px;
+                            &:after{
+                                position: absolute;
+                                content: '';
+                                right: -10px;
+                                top: 13px;
+                                width: 0;
+                                height: 0;
+                                border-style: solid dashed dashed;
+                                border-color: #5FB878 transparent transparent;
+                                overflow: hidden;
+                                border-width: 10px;
+                            }
+                        }
+                    }
+
+                }
+            }
+            .chat-say{
+                border-left: 1px solid #cccccc;
+                border-right: 1px solid #cccccc;
+                height: $chatSayHeight;
+                overflow-y: auto;
+                display: block;
+                word-wrap: break-word;
+                outline: 0;
+                cursor: text;
+                padding: 5px 5px 0 5px;
+            }
+            .chat-footer{
+                height: $chatFooterHeight;
+                padding: 5px;
+                text-align: right;
+                border-left: 1px solid #cccccc;
+                border-right: 1px solid #cccccc;
+                border-bottom: 1px solid #cccccc;
+            }
+        }
+        .online-list{
+            border-top: 1px solid #cccccc;
+            border-left: 1px solid #cccccc;
+            border-bottom: 1px solid #cccccc;
+            height: $chatLogHeight+$chatSayHeight+$chatFooterHeight;
+            width: $onlineListWidth;
+        }
+    }
+    .chat-index-footer{
+        border: 1px solid #cccccc;
+        height: 520px;
+        width: 100%;
+    }
+}

@@ -1,0 +1,5 @@
+@charset "UTF-8";//文件内容有汉字（包含注释）必须引用这句代码
+//引入变量声明文件
+@import "variable";
+//引入子页面CSS
+@import "index/chat/index","index/index/index";
