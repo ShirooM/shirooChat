@@ -2,9 +2,161 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>sChat</title>
+    {include file="public/css" /}
 </head>
-<body>
+<body class="index-chat-index">
+<div class="chat-index-home clearfix">
+    <div class="online-list float-left">
+        <div>当前在线(<span id="user-count"></span>)</div>
+        <div>
+            <ul id="o-list">
 
+            </ul>
+        </div>
+    </div>
+    <div class="chat-box float-left">
+        <!--聊天日志start-->
+        <div id="chat-log" class="chat-log">
+            <!--<div class="u clearfix">
+                <div class="portrait float-left">
+                    <img src="https://thirdqq.qlogo.cn/qqapp/101343857/0BF741E13826BC64C89A0F2B77730E01/100" class="rounded-circle">
+                </div>
+                <div class="info float-left">
+                    <div class="name">对方昵称</div>
+                    <div class="message">对方说的话，啊啊啊啊。</div>
+                </div>
+            </div>
+            <div class="m clearfix">
+                <div class="portrait float-right">
+                    <img src="https://thirdqq.qlogo.cn/qqapp/101343857/0BF741E13826BC64C89A0F2B77730E01/100" class="rounded-circle">
+                </div>
+                <div class="info float-right">
+                    <div class="name">我的昵称</div>
+                    <div class="message">我说的话</div>
+                </div>
+            </div>-->
+        </div>
+        <!--聊天日志end-->
+        <!--聊天框start-->
+        <div id="chat-say" class="chat-say" contenteditable="true" hidefocus="true" tabindex="0"></div>
+        <!--聊天框end-->
+        <div class="chat-footer">
+            <button type="button" id="clear-content" class="btn btn-primary">发送(Enter)</button>
+            <button type="button" id="send" class="btn btn-primary">发送(Enter)</button>
+        </div>
+    </div>
+</div>
+<!--<div class="chat-index-footer">
+
+</div>-->
+{include file="public/js" /}
+<script>
+    var scrollTopVal=0;//存储滚动条距离顶部的位置。
+    var uid={$uid};//存储用户的UID。用于判断自己说的话还是别人说的话。
+    //支持粘贴截图
+    $('#chat-say').screenshotPaste({
+        imgContainer:'#chat-say',
+        imgHeight:50
+    });
+    //文档载入完成
+    $(document).ready(function () {
+        ws=new WebSocket("ws://127.0.0.1:8282");
+        ws.onopen=function (ev) {
+            console.log("连接服务器成功");
+
+        };
+        ws.onerror=function (ev) {
+            console.log("连接服务器出错");
+        };
+        ws.onclose=function (ev) {
+            console.log("连接被断开");
+        };
+        ws.onmessage=function (ev) {
+            //console.log(ev);
+            var data=eval("("+ev.data+")");
+            var type=data.type || "";
+            switch (type){
+                case "init":
+                    $.post("{:url('index/chat/bind')}",{'client_id':data.client_id},function (data) {},"json");
+                    break;
+                case "enter":
+                    console.log(data.data);
+                    $("#user-count").text(data.user_count);
+                    var user_list="";
+                    console.log(data.uid);
+                    for(var key in data.data){
+                        console.log(data.data[key]);
+                        user_list+="<li>"+data.data[key].username+"</li>";
+                    }
+                    $("#o-list").html("");
+                    $("#o-list").html(user_list);
+                    break;
+                case "message":
+                    console.log(data);
+                    //这里就是处理服务器返回的数据信息
+                    var message="";
+                    if(uid===data.uid){
+                        //自己的消息
+                        message+='<div class="m clearfix">';
+                        message+='<div class="portrait float-right">';
+                        message+='<img src="https://thirdqq.qlogo.cn/qqapp/101343857/0BF741E13826BC64C89A0F2B77730E01/100" class="rounded-circle">';
+                        message+='</div>';
+                        message+='<div class="info float-right">';
+                        message+='<div class="name">'+data.username+'</div>';
+                        message+='<div class="message">'+data.data+'</div>';
+                        message+='</div>';
+                        message+='</div>';
+                    }else{
+                        message+='<div class="u clearfix">';
+                        message+='<div class="portrait float-left">';
+                        message+='<img src="https://thirdqq.qlogo.cn/qqapp/101343857/0BF741E13826BC64C89A0F2B77730E01/100" class="rounded-circle">';
+                        message+='</div>';
+                        message+='<div class="info float-left">';
+                        message+='<div class="name">'+data.username+'</div>';
+                        message+='<div class="message">'+data.data+'</div>';
+                        message+='</div>';
+                        message+='</div>';
+                    }
+
+                    //输入内容给用户看。
+                    $("#chat-log").append(message);
+                    //处理滚动条位置
+                    var chatLogObj=document.getElementById("chat-log");
+                    //console.log("scrollTopVal:"+scrollTopVal);
+                    //console.log("scrollTop:"+chatLogObj.scrollTop);
+                    if(scrollTopVal<=chatLogObj.scrollTop){
+                        chatLogObj.scrollTop=chatLogObj.scrollHeight;
+                        scrollTopVal=chatLogObj.scrollTop;
+                    }
+                    break;
+                default:
+                    console.log(data);
+            }
+        };
+    });
+
+    $("#chat-say").keydown(function (event) {
+        var keyCode=window.event?event.keyCode:event.which;
+        if(event.ctrlKey && keyCode===13){
+            $("#chat-say").html($("#chat-say").html()+"<br><br>");
+            placeCaretAtEnd($("#chat-say").get(0));
+            return false;
+        }
+        if(!(event.ctrlKey) && keyCode===13){
+            $("#send").click();
+            event.preventDefault();
+            return false;
+        }
+    });
+    $("#send").click(function () {
+        var sendData=$("#chat-say").html();
+        $.post("{:url('index/chat/onmessage')}",{
+            'post_uid':0,
+            'client_message':sendData
+        },function (data) {$("#chat-say").html("");},"json");
+    });
+
+</script>
 </body>
 </html>

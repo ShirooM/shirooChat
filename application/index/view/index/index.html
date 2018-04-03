@@ -3,84 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Title</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <style type="text/css">
-        body{
-            padding: 0;
-            margin: 0;
-        }
-        .edit-ipt {
-            width: 100%;
-            height: 100px;
-            resize: none;
-            white-space: pre-wrap;
-            overflow-y: auto;
-            font-weight: normal;
-            font-size: 14px;
-            word-break: break-all;
-            font-style: normal;
-            outline: none;
-            padding: 5px;
-            border: 1px solid #cccccc;
-        }
-        .s-log{
-            border: 1px solid #cccccc;
-            padding: 5px;
-            height: 300px;
-            width: 100%;
-            overflow-y: auto;
-            white-space: pre-wrap;
-        }
-    </style>
+    <title>首页</title>
+    {include file="public/css" /}
 </head>
-<body>
-    <div id="log" class="s-log"></div>
-    <div id="say-box" class="edit-ipt" contenteditable="true" hidefocus="true" tabindex="0"></div>
-    <div>
-        <button id="btn-send">aaaa</button>
-    </div>
-
-    <!--JS调用start-->
-    <script type="text/javascript" src="/static/plugins/jquery/jquery-3.3.1.min.js"></script>
-    <script type="text/javascript" src="/static/plugins/screenshot-paste/screenshot-paste.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <!--JS调用end-->
-    <script type="text/javascript">
-        $(document).ready(function () {
-            ws=new WebSocket("ws://127.0.0.1:8282");
-            ws.onopen=function (ev) {
-                console.log("连接聊天服务器成功。");
-            };
-            ws.onmessage=function (ev) {
-                console.log(ev);
-                var data=eval("("+ev.data+")");
-                var type=data.type || "";
-                switch (type){
-                    case "init":
-                        $.post("{:url('index/index/bind')}",{'client_id':data.client_id},function (data) {},"json");
-                        break;
-                    default:
-                        console.log(data);
-                        $("#log").append(data.message+"\r\n");
-                }
-            };
-        });
-        $('#say-box').screenshotPaste({
-            imgContainer:'#say-box',
-            imgHeight:50
-        });
-        $('#btn-send').click(function () {
-            var data=$("#say-box").html();
-            console.log("发送消息。");
-            $.post("{:url('index/index/abc')}",{"client_id":data.client_id,"message":data},function (data) {},"json");
-        });
-        $('img#say-box').click(function () {
-            console.log('单击了图片')
-        });
-    </script>
-
+<body class="index-index-index">
+<div class="login-box">
+    <form id="login-form" action="{:url('index/chat/index')}" method="post">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">您的昵称</span>
+            </div>
+            <input type="text" id="username" name="username" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+        </div>
+        <div>
+            <button type="submit" class="btn btn-primary btn-block">进入聊天室</button>
+        </div>
+    </form>
+</div>
+    {include file="public/js" /}
 </body>
 </html>

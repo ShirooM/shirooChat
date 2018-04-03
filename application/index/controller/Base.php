@@ -22,7 +22,19 @@ class Base extends Controller
         if(is_null($request)){
             $request=Request::instance();
         }
+        //定义各种常量
+        define('CHAT_TYPE_MESSAGE','message');//消息类型
+        define('CHAT_TYPE_ENTER','enter');//客户进入类型
+
         Gateway::$registerAddress='127.0.0.1:1238';
+
+    }
+    public function setLoginData(){
+        //登录成功后记录相关数据
+
+    }
+    public function unLoginData(){
+        //退出后删除数据
 
     }
 }
