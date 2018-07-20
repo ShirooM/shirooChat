@@ -42,7 +42,6 @@
         <div id="chat-say" class="chat-say" contenteditable="true" hidefocus="true" tabindex="0"></div>
         <!--聊天框end-->
         <div class="chat-footer">
-            <button type="button" id="clear-content" class="btn btn-primary">发送(Enter)</button>
             <button type="button" id="send" class="btn btn-primary">发送(Enter)</button>
         </div>
     </div>
@@ -50,6 +49,28 @@
 <!--<div class="chat-index-footer">
 
 </div>-->
+<!-- Modal -->
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 {include file="public/js" /}
 <script>
     var scrollTopVal=0;//存储滚动条距离顶部的位置。
@@ -96,7 +117,7 @@
                     console.log(data);
                     //这里就是处理服务器返回的数据信息
                     var message="";
-                    if(uid===data.uid){
+                    if(uid==data.uid){
                         //自己的消息
                         message+='<div class="m clearfix">';
                         message+='<div class="portrait float-right">';
@@ -119,7 +140,7 @@
                         message+='</div>';
                     }
 
-                    //输入内容给用户看。
+                    //输出内容给用户看。
                     $("#chat-log").append(message);
                     //处理滚动条位置
                     var chatLogObj=document.getElementById("chat-log");
@@ -129,6 +150,8 @@
                         chatLogObj.scrollTop=chatLogObj.scrollHeight;
                         scrollTopVal=chatLogObj.scrollTop;
                     }
+                    //清空输入框内容
+                    $("#chat-say").html("");
                     break;
                 default:
                     console.log(data);
@@ -154,7 +177,9 @@
         $.post("{:url('index/chat/onmessage')}",{
             'post_uid':0,
             'client_message':sendData
-        },function (data) {$("#chat-say").html("");},"json");
+        },function (data) {
+            console.log(data);
+        },"json");
     });
 
 </script>

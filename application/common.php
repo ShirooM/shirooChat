@@ -10,3 +10,6 @@
 // +----------------------------------------------------------------------
 
 // 应用公共文件
+function shiroo_json($cid,$info,$arr=array()){
+    return json_encode(array_merge(array('cid'=>$cid,'info'=>$info),$arr));
+}

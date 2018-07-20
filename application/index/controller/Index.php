@@ -6,6 +6,7 @@ class Index extends Base
 {
     public function index()
     {
-        return $this->fetch();
+        $this->redirect('index/chat/index');
+        //return $this->fetch();
     }
 }
