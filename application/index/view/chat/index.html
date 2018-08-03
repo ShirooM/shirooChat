@@ -85,23 +85,28 @@
         ws=new WebSocket("ws://127.0.0.1:8282");
         ws.onopen=function (ev) {
             console.log("连接服务器成功");
+            //layer.alert("连接服务器成功。");
 
         };
         ws.onerror=function (ev) {
-            console.log("连接服务器出错");
+            console.log(ev);
+            layer.alert("连接服务器失败,请联系客服咨询。");
         };
         ws.onclose=function (ev) {
             console.log("连接被断开");
         };
         ws.onmessage=function (ev) {
+            //因为你一旦连接上了服务端，服务端onConnect就会响应，创建并把client_id发送给你。这时候你就会在onmessage这里接收到这个消息。
             //console.log(ev);
             var data=eval("("+ev.data+")");
             var type=data.type || "";
             switch (type){
                 case "init":
+                    //初始化。收到client_id，进行绑定。
                     $.post("{:url('index/chat/bind')}",{'client_id':data.client_id},function (data) {},"json");
                     break;
                 case "enter":
+                    //有新客户进入
                     console.log(data.data);
                     $("#user-count").text(data.user_count);
                     var user_list="";
@@ -114,6 +119,7 @@
                     $("#o-list").html(user_list);
                     break;
                 case "message":
+                    //有新消息到达
                     console.log(data);
                     //这里就是处理服务器返回的数据信息
                     var message="";

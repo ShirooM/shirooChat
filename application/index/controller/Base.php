@@ -45,12 +45,7 @@ class Base extends Controller
             $uid=$loginData['uid'];//获取用户的UID
             if(empty($uid)){
                 //取不到UID的话，表示没有登录，跳转到登录页面
-                if(IS_AJAX){
-                    echo(shiroo_json(-10000,'没有登录，无权操作。'));
-                    exit();
-                }else{
-                    $this->redirect('index/user/login');
-                }
+                $this->redirect('index/user/login');
             }
         }
     }

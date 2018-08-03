@@ -25,11 +25,7 @@ class User extends Base
         $uid=Session::has('login.uid')?Session::get('login.uid'):0;
         if($uid>0){
             //已登录
-            if(IS_AJAX){
-                return shiroo_json(0,'已经登录',array('uid'=>$uid));
-            }else{
-                $this->success('已经登录，UID：'.$uid,'index/chat/index');
-            }
+            $this->success('已经登录，UID：'.$uid,'index/chat/index');
         }else{
             //没有登录
             if(IS_POST){
@@ -52,10 +48,6 @@ class User extends Base
     public function loginOut(){
         $jumpURL=$this->request->param('jumpurl')?:'index/chat/index';
         Session::delete('login');
-        if(IS_AJAX){
-            return shiroo_json(1,'退出成功。',array('jumpurl'=>$jumpURL));
-        }else{
-            $this->success('退出成功.',$jumpURL);
-        }
+        $this->success('退出成功.',$jumpURL);
     }
 }
